@@ -27,7 +27,7 @@ const addNuocUong = (req, res) => {
       } else {
         pool.query(
           "INSERT INTO tam_tinh_nuoc_uong (ma_nuoc_uong_loai, so_luong_tam_tinh, trang_thai_tam_tinh, ma_tam_tinh) VALUES(?,?,?,?)",
-          [id_nuoc_uong, 0, 0, id_tam_tinh],
+          [id_nuoc_uong, 1, 0, id_tam_tinh],
           (err, data) => {
             if (err) {
               throw err;
@@ -69,7 +69,7 @@ const addDoAn = (req, res) => {
       } else {
         pool.query(
           "INSERT INTO tam_tinh_do_an (ma_do_an, so_luong_tam_tinh, trang_thai_tam_tinh, ma_tam_tinh) values (?,?,?,?)",
-          [id_do_an, 0, 0, id_tam_tinh],
+          [id_do_an, 1, 0, id_tam_tinh],
           (err, data) => {
             if (err) {
               throw err;
@@ -110,7 +110,7 @@ const addDungCuYTe = (req, res) => {
       } else {
         pool.query(
           "INSERT INTO tam_tinh_dung_cu_y_te (ma_dung_cu_y_te, so_luong_tam_tinh, trang_thai_tam_tinh, ma_tam_tinh) VALUES(?,?,?,?)",
-          [id_dung_cu_y_te, 0, 0, id_tam_tinh],
+          [id_dung_cu_y_te, 1, 0, id_tam_tinh],
           (err, data) => {
             if (err) {
               throw err;
@@ -151,7 +151,7 @@ const addTheThao = (req, res) => {
       } else {
         pool.query(
           "INSERT INTO tam_tinh_dung_cu_the_thao (ma_dung_cu_the_thao, so_luong_tam_tinh, trang_thai_tam_tinh, ma_tam_tinh) VALUES (?,?,?,?)",
-          [id_dung_cu_the_thao, 0, 0, id_tam_tinh],
+          [id_dung_cu_the_thao, 1, 0, id_tam_tinh],
           (err, data) => {
             if (err) {
               throw err;
@@ -208,7 +208,7 @@ const addSan = (req, res) => {
 const getTamTinhDoAn = (req, res) => {
   let id_tam_tinh = req.params.id_tam_tinh;
   pool.query(
-    "SELECT * FROM tam_tinh join tam_tinh_do_an on tam_tinh_do_an.ma_tam_tinh = tam_tinh.ma_tam_tinh join do_an on tam_tinh_do_an.ma_do_an = do_an.ma_do_an WHERE tam_tinh_do_an.ma_tam_tinh=? AND tam_tinh_do_an.trang_thai_tam_tinh=0",
+    "SELECT * FROM tam_tinh join tam_tinh_do_an on tam_tinh_do_an.ma_tam_tinh = tam_tinh.ma_tam_tinh join do_an on tam_tinh_do_an.ma_do_an = do_an.ma_do_an WHERE tam_tinh_do_an.ma_tam_tinh=? AND tam_tinh_do_an.trang_thai_tam_tinh=0 AND tam_tinh.thanh_toan=0",
     [id_tam_tinh],
     (err, data) => {
       if (err) {
@@ -223,7 +223,7 @@ const getTamTinhDoAn = (req, res) => {
 const getTamTinhSan = (req, res) => {
   let id_tam_tinh = req.params.id_tam_tinh;
   pool.query(
-    "SELECT * FROM tam_tinh_san JOIN tam_tinh on tam_tinh_san.ma_tam_tinh = tam_tinh.ma_tam_tinh join san on tam_tinh_san.ma_san = san.ma_san JOIN chi_nhanh on san.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen join khung_gio on tam_tinh_san.ma_khung_gio = khung_gio.ma_khung_gio WHERE tam_tinh.ma_tam_tinh=? AND tam_tinh_san.trang_thai_tam_tinh=0",
+    "SELECT * FROM tam_tinh_san JOIN tam_tinh on tam_tinh_san.ma_tam_tinh = tam_tinh.ma_tam_tinh join san on tam_tinh_san.ma_san = san.ma_san JOIN chi_nhanh on san.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen join khung_gio on tam_tinh_san.ma_khung_gio = khung_gio.ma_khung_gio WHERE tam_tinh.ma_tam_tinh=? AND tam_tinh_san.trang_thai_tam_tinh=0 AND tam_tinh.thanh_toan=0",
     [id_tam_tinh],
     (err, data) => {
       if (err) {
@@ -238,7 +238,7 @@ const getTamTinhSan = (req, res) => {
 const getTamTinhNuocUong = (req, res) => {
   let id_tam_tinh = req.params.id_tam_tinh;
   pool.query(
-    "SELECT * FROM tam_tinh join tam_tinh_nuoc_uong on tam_tinh_nuoc_uong.ma_tam_tinh = tam_tinh.ma_tam_tinh join nuoc_uong_loai on tam_tinh_nuoc_uong.ma_nuoc_uong_loai = nuoc_uong_loai.ma_nuoc_uong_loai join nuoc_uong on nuoc_uong_loai.ma_nuoc_uong = nuoc_uong.ma_nuoc_uong WHERE tam_tinh_nuoc_uong.ma_tam_tinh=? AND tam_tinh_nuoc_uong.trang_thai_tam_tinh=0",
+    "SELECT * FROM tam_tinh join tam_tinh_nuoc_uong on tam_tinh_nuoc_uong.ma_tam_tinh = tam_tinh.ma_tam_tinh join nuoc_uong_loai on tam_tinh_nuoc_uong.ma_nuoc_uong_loai = nuoc_uong_loai.ma_nuoc_uong_loai join nuoc_uong on nuoc_uong_loai.ma_nuoc_uong = nuoc_uong.ma_nuoc_uong WHERE tam_tinh_nuoc_uong.ma_tam_tinh=? AND tam_tinh_nuoc_uong.trang_thai_tam_tinh=0 AND tam_tinh.thanh_toan=0",
     [id_tam_tinh],
     (err, data) => {
       if (err) {
@@ -253,7 +253,7 @@ const getTamTinhNuocUong = (req, res) => {
 const getTamTinhYTe = (req, res) => {
   let id_tam_tinh = req.params.id_tam_tinh;
   pool.query(
-    "SELECT * FROM tam_tinh join tam_tinh_dung_cu_y_te on tam_tinh_dung_cu_y_te.ma_tam_tinh = tam_tinh.ma_tam_tinh join dung_cu_y_te on tam_tinh_dung_cu_y_te.ma_dung_cu_y_te = dung_cu_y_te.ma_dung_cu_y_te WHERE tam_tinh_dung_cu_y_te.ma_tam_tinh=? AND tam_tinh_dung_cu_y_te.trang_thai_tam_tinh=0",
+    "SELECT * FROM tam_tinh join tam_tinh_dung_cu_y_te on tam_tinh_dung_cu_y_te.ma_tam_tinh = tam_tinh.ma_tam_tinh join dung_cu_y_te on tam_tinh_dung_cu_y_te.ma_dung_cu_y_te = dung_cu_y_te.ma_dung_cu_y_te WHERE tam_tinh_dung_cu_y_te.ma_tam_tinh=? AND tam_tinh_dung_cu_y_te.trang_thai_tam_tinh=0 AND tam_tinh.thanh_toan=0",
     [id_tam_tinh],
     (err, data) => {
       if (err) {
@@ -268,7 +268,7 @@ const getTamTinhYTe = (req, res) => {
 const getTamTinhTheThao = (req, res) => {
   let id_tam_tinh = req.params.id_tam_tinh;
   pool.query(
-    "SELECT * FROM tam_tinh join tam_tinh_dung_cu_the_thao on tam_tinh_dung_cu_the_thao.ma_tam_tinh = tam_tinh.ma_tam_tinh join dung_cu_the_thao on tam_tinh_dung_cu_the_thao.ma_dung_cu_the_thao = dung_cu_the_thao.ma_dung_cu_the_thao WHERE tam_tinh_dung_cu_the_thao.ma_tam_tinh=? AND tam_tinh_dung_cu_the_thao.trang_thai_tam_tinh=0",
+    "SELECT * FROM tam_tinh join tam_tinh_dung_cu_the_thao on tam_tinh_dung_cu_the_thao.ma_tam_tinh = tam_tinh.ma_tam_tinh join dung_cu_the_thao on tam_tinh_dung_cu_the_thao.ma_dung_cu_the_thao = dung_cu_the_thao.ma_dung_cu_the_thao WHERE tam_tinh_dung_cu_the_thao.ma_tam_tinh=? AND tam_tinh_dung_cu_the_thao.trang_thai_tam_tinh=0 AND tam_tinh.thanh_toan=0",
     [id_tam_tinh],
     (err, data) => {
       if (err) {

@@ -1,4 +1,6 @@
 const pool = require("../../config/database");
+const nodemailer = require("nodemailer");
+
 const getTodayDate = () => {
   const today = new Date();
   const year = today.getFullYear();
@@ -71,9 +73,103 @@ const create = (req, res) => {
                                         throw err;
                                       }
                                       if (data) {
-                                        return res
-                                          .status(200)
-                                          .json({ message: "success" });
+                                        pool.query(
+                                          "UPDATE tam_tinh SET thanh_toan = 1 WHERE ma_tam_tinh = ?",
+                                          [id_tam_tinh],
+                                          (err, data) => {
+                                            if (err) {
+                                              throw err;
+                                            }
+                                            if (data) {
+                                              pool.query(
+                                                "SELECT * FROM tam_tinh WHERE tam_tinh.ma_tam_tinh = ?",
+                                                [id_tam_tinh],
+                                                (err, data) => {
+                                                  if (err) {
+                                                    throw err;
+                                                  }
+                                                  if (data.length > 0) {
+                                                    let ma_khach_hang =
+                                                      data[0].ma_khach_hang;
+                                                    pool.query(
+                                                      "INSERT INTO tam_tinh (ma_khach_hang,thanh_toan) VALUES (?,?)",
+                                                      [ma_khach_hang, 0],
+                                                      (err, data) => {
+                                                        if (err) {
+                                                          throw err;
+                                                        }
+                                                        if (data) {
+                                                          pool.query(
+                                                            "SELECT * FROM tam_tinh join khach_hang on tam_tinh.ma_khach_hang = khach_hang.ma_khach_hang WHERE tam_tinh.ma_tam_tinh = ?",
+                                                            [id_tam_tinh],
+                                                            (err, result) => {
+                                                              if (err) {
+                                                                throw err;
+                                                              }
+                                                              if (
+                                                                result.length >
+                                                                0
+                                                              ) {
+                                                                let email =
+                                                                  result[0]
+                                                                    .email;
+                                                                const transport =
+                                                                  nodemailer.createTransport(
+                                                                    {
+                                                                      host: "smtp.gmail.com",
+                                                                      port: 587,
+                                                                      service:
+                                                                        "gmail",
+                                                                      secure: false,
+                                                                      auth: {
+                                                                        user: "dathuu0129@gmail.com",
+                                                                        pass: "frbsnjhbuouqfcir",
+                                                                      },
+                                                                    }
+                                                                  );
+                                                                // Thiết lập email options
+                                                                const mailOptions =
+                                                                  {
+                                                                    from: "dathuu0129@gmail.com", // Địa chỉ email của người gửi
+                                                                    to: `${email}`, // Địa chỉ email của người nhận
+                                                                    subject:
+                                                                      "HOÁ ĐƠN THANH TOÁN", // Tiêu đề email
+                                                                    text: `Hoá đơn thanh toán: http://localhost:3000/admin-chi-tiet-hoa-don/${data.insertId}`, // Nội dung email
+                                                                  };
+                                                                transport.sendMail(
+                                                                  mailOptions,
+                                                                  (
+                                                                    error,
+                                                                    info
+                                                                  ) => {
+                                                                    if (error) {
+                                                                      throw error;
+                                                                    }
+                                                                    if (info) {
+                                                                      console.log(
+                                                                        info
+                                                                      );
+                                                                    }
+                                                                  }
+                                                                );
+                                                              }
+                                                            }
+                                                          );
+                                                          return res
+                                                            .status(200)
+                                                            .json({
+                                                              message:
+                                                                "success",
+                                                            });
+                                                        }
+                                                      }
+                                                    );
+                                                  }
+                                                }
+                                              );
+                                            }
+                                          }
+                                        );
                                       }
                                     }
                                   );
@@ -378,7 +474,81 @@ const getByMaHoaDon = async (req, res) => {
   //     );
   //   });
   // });
-  
+  let ma_don_gia = req.params.id;
+  pool.query(
+    "SELECT * FROM don_gia join tam_tinh on tam_tinh.ma_tam_tinh = don_gia.ma_tam_tinh join khach_hang on tam_tinh.ma_khach_hang = khach_hang.ma_khach_hang WHERE don_gia.ma_don_gia = ?;",
+    [ma_don_gia],
+    (err, data) => {
+      if (err) {
+        throw err;
+      }
+      if (data) {
+        pool.query(
+          "SELECT * FROM tam_tinh_do_an join don_gia on tam_tinh_do_an.ma_tam_tinh = don_gia.ma_tam_tinh join do_an on tam_tinh_do_an.ma_do_an = do_an.ma_do_an WHERE don_gia.ma_don_gia=?;",
+          [ma_don_gia],
+          (err, data1) => {
+            if (err) {
+              throw err;
+            }
+            if (data1) {
+              pool.query(
+                "SELECT * FROM tam_tinh_nuoc_uong join nuoc_uong_loai on tam_tinh_nuoc_uong.ma_nuoc_uong_loai = nuoc_uong_loai.ma_nuoc_uong_loai join loai_nuoc_uong on nuoc_uong_loai.ma_loai_nuoc_uong = loai_nuoc_uong.ma_loai_nuoc_uong join nuoc_uong on nuoc_uong_loai.ma_nuoc_uong = nuoc_uong.ma_nuoc_uong join don_gia on don_gia.ma_tam_tinh = tam_tinh_nuoc_uong.ma_tam_tinh WHERE don_gia.ma_don_gia=?;",
+                [ma_don_gia],
+                (err, data2) => {
+                  if (err) {
+                    throw err;
+                  }
+                  if (data2) {
+                    pool.query(
+                      "SELECT * FROM tam_tinh_dung_cu_y_te join dung_cu_y_te on tam_tinh_dung_cu_y_te.ma_dung_cu_y_te = dung_cu_y_te.ma_dung_cu_y_te join don_gia on tam_tinh_dung_cu_y_te.ma_tam_tinh = don_gia.ma_tam_tinh WHERE don_gia.ma_don_gia = ?;",
+                      [ma_don_gia],
+                      (err, data3) => {
+                        if (err) {
+                          throw err;
+                        }
+                        if (data3) {
+                          pool.query(
+                            "SELECT * FROM tam_tinh_dung_cu_the_thao join dung_cu_the_thao on tam_tinh_dung_cu_the_thao.ma_dung_cu_the_thao = dung_cu_the_thao.ma_dung_cu_the_thao join don_gia on tam_tinh_dung_cu_the_thao.ma_tam_tinh = don_gia.ma_tam_tinh WHERE don_gia.ma_don_gia = ?;",
+                            [ma_don_gia],
+                            (err, data4) => {
+                              if (err) {
+                                throw err;
+                              }
+                              if (data4) {
+                                pool.query(
+                                  "SELECT * FROM tam_tinh_san join san on tam_tinh_san.ma_san = san.ma_san join khung_gio on khung_gio.ma_san = san.ma_san join chi_nhanh on san.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen join don_gia on don_gia.ma_tam_tinh = tam_tinh_san.ma_tam_tinh WHERE don_gia.ma_don_gia = ?;",
+                                  [ma_don_gia],
+                                  (err, data5) => {
+                                    if (err) {
+                                      throw err;
+                                    }
+                                    if (data5) {
+                                      return res.status(200).json({
+                                        don_gia: data,
+                                        do_an: data1,
+                                        nuoc_uong: data2,
+                                        dung_cu_y_te: data3,
+                                        dung_cu_the_thao: data4,
+                                        san: data5,
+                                      });
+                                    }
+                                  }
+                                );
+                              }
+                            }
+                          );
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    }
+  );
 };
 module.exports = {
   getByMaHoaDon,

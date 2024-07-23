@@ -37,8 +37,8 @@ const createNew = (req, res) => {
                 }
                 if (data) {
                   pool.query(
-                    "INSERT INTO `tam_tinh` (`ma_khach_hang`) VALUES (?)",
-                    [data.insertId],
+                    "INSERT INTO `tam_tinh` (`ma_khach_hang`,`thanh_toan`) VALUES (?,?)",
+                    [data.insertId, 0],
                     (err, data) => {
                       if (err) {
                         throw err;
@@ -75,7 +75,7 @@ const Login = (req, res) => {
             }
             if (data) {
               pool.query(
-                "SELECT * FROM khach_hang join tam_tinh on khach_hang.ma_khach_hang=tam_tinh.ma_khach_hang WHERE email = ?",
+                "SELECT * FROM khach_hang join tam_tinh on khach_hang.ma_khach_hang=tam_tinh.ma_khach_hang WHERE email = ? AND tam_tinh.thanh_toan=0",
                 [username],
                 (err, data) => {
                   if (err) {

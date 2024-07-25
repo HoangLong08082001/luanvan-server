@@ -254,108 +254,20 @@ const confrimPayment = (req, res) => {
 const getByMaKhachHang = async (req, res) => {
   let id = req.params.id;
   try {
-    const queryDonGia = `
-    SELECT * FROM don_gia
-    WHERE ma_tam_tinh IN (
-      SELECT ma_tam_tinh FROM tam_tinh WHERE ma_khach_hang = ?
-    )
-  `;
-
-    // Query to get tam_tinh_san information
-    const queryTamTinhSan = `
-    SELECT * FROM tam_tinh_san tts
-    JOIN san s ON tts.ma_san = s.ma_san join chi_nhanh on s.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen join loai_san on s.ma_loai_san = loai_san.ma_loai_san join khung_gio on s.ma_san = khung_gio.ma_san
-    WHERE tts.ma_tam_tinh IN (
-      SELECT ma_tam_tinh FROM tam_tinh WHERE ma_khach_hang = ?
-    )
-  `;
-
-    // Query to get tam_tinh_nuoc_uong information
-    const queryTamTinhNuocUong = `
-    SELECT nu.*, ln.* FROM tam_tinh_nuoc_uong ttnu
-    JOIN nuoc_uong_loai nul ON ttnu.ma_nuoc_uong_loai = nul.ma_nuoc_uong_loai
-    JOIN nuoc_uong nu ON nul.ma_nuoc_uong = nu.ma_nuoc_uong
-    JOIN loai_nuoc_uong ln ON nul.ma_loai_nuoc_uong = ln.ma_loai_nuoc_uong
-    WHERE ttnu.ma_tam_tinh IN (
-      SELECT ma_tam_tinh FROM tam_tinh WHERE ma_khach_hang = ?
-    )
-  `;
-
-    // Query to get tam_tinh_do_an information
-    const queryTamTinhDoAn = `
-    SELECT da.* FROM tam_tinh_do_an ttda
-    JOIN do_an da ON ttda.ma_do_an = da.ma_do_an
-    WHERE ttda.ma_tam_tinh IN (
-      SELECT ma_tam_tinh FROM tam_tinh WHERE ma_khach_hang = ?
-    )
-  `;
-
-    // Query to get tam_tinh_dung_cu_the_thao information
-    const queryTamTinhDungCuTheThao = `
-    SELECT dctt.* FROM tam_tinh_dung_cu_the_thao ttdctt
-    JOIN dung_cu_the_thao dctt ON ttdctt.ma_dung_cu_the_thao = dctt.ma_dung_cu_the_thao
-    WHERE ttdctt.ma_tam_tinh IN (
-      SELECT ma_tam_tinh FROM tam_tinh WHERE ma_khach_hang = ?
-    )
-  `;
-
-    // Query to get tam_tinh_dung_cu_y_te information
-    const queryTamTinhDungCuYTe = `
-    SELECT dcyt.* FROM tam_tinh_dung_cu_y_te ttdcyt
-    JOIN dung_cu_y_te dcyt ON ttdcyt.ma_dung_cu_y_te = dcyt.ma_dung_cu_y_te
-    WHERE ttdcyt.ma_tam_tinh IN (
-      SELECT ma_tam_tinh FROM tam_tinh WHERE ma_khach_hang = ?
-    )
-  `;
-
-    // Execute all queries in parallel
-    pool.query(queryDonGia, [id], (err, resultsDonGia) => {
-      if (err) throw err;
-
-      pool.query(queryTamTinhSan, [id], (err, resultsTamTinhSan) => {
-        if (err) throw err;
-
-        pool.query(
-          queryTamTinhNuocUong,
-          [id],
-          (err, resultsTamTinhNuocUong) => {
-            if (err) throw err;
-
-            pool.query(queryTamTinhDoAn, [id], (err, resultsTamTinhDoAn) => {
-              if (err) throw err;
-
-              pool.query(
-                queryTamTinhDungCuTheThao,
-                [id],
-                (err, resultsTamTinhDungCuTheThao) => {
-                  if (err) throw err;
-
-                  pool.query(
-                    queryTamTinhDungCuYTe,
-                    [id],
-                    (err, resultsTamTinhDungCuYTe) => {
-                      if (err) throw err;
-
-                      // Prepare response object
-                      const data = {
-                        don_gia: resultsDonGia,
-                        tam_tinh_san: resultsTamTinhSan,
-                        tam_tinh_nuoc_uong: resultsTamTinhNuocUong,
-                        tam_tinh_do_an: resultsTamTinhDoAn,
-                        tam_tinh_dung_cu_the_thao: resultsTamTinhDungCuTheThao,
-                        tam_tinh_dung_cu_y_te: resultsTamTinhDungCuYTe,
-                      };
-
-                      return res.status(200).json(data);
-                    }
-                  );
-                }
-              );
-            });
-          }
-        );
-      });
-    });
+    pool.query(
+      "SELECT * FROM `don_gia` join tam_tinh on don_gia.ma_tam_tinh = tam_tinh.ma_tam_tinh join khach_hang on tam_tinh.ma_khach_hang = khach_hang.ma_khach_hang WHERE khach_hang.ma_khach_hang=?",
+      [id],
+      (err, data) => {
+        if (err) {
+          throw err;
+        }
+        if (data.length > 0) {
+          return res.status(200).json(data);
+        } else {
+          return res.status(200).json([]);
+        }
+      }
+    );
   } catch (error) {
     return res.status(500).json({ message: "fails" });
   }
@@ -516,7 +428,7 @@ const getByMaHoaDon = async (req, res) => {
                               }
                               if (data4) {
                                 pool.query(
-                                  "SELECT * FROM tam_tinh_san join san on tam_tinh_san.ma_san = san.ma_san join khung_gio on khung_gio.ma_san = san.ma_san join chi_nhanh on san.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen join don_gia on don_gia.ma_tam_tinh = tam_tinh_san.ma_tam_tinh WHERE don_gia.ma_don_gia = ?;",
+                                  "SELECT * FROM tam_tinh_san join don_gia on tam_tinh_san.ma_tam_tinh = don_gia.ma_tam_tinh join san on tam_tinh_san.ma_san = san.ma_san join chi_nhanh on san.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen WHERE don_gia.ma_don_gia = ?;",
                                   [ma_don_gia],
                                   (err, data5) => {
                                     if (err) {

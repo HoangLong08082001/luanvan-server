@@ -2,10 +2,10 @@ const mysql = require("mysql");
 
 const pool = mysql.createConnection({
   port: 3306,
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "sportretal",
+  host: "bdkrv4uf7kpaniqwj931-mysql.services.clever-cloud.com",
+  user: "ukkswwf1deccs8x8",
+  password: "nOIm9aunrqj9MavlqrQz",
+  database: "bdkrv4uf7kpaniqwj931",
   connectionLimit: 10,
 });
 

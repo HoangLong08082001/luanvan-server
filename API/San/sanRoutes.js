@@ -1,4 +1,4 @@
-import {
+const {
   Block,
   Delete,
   createNew,
@@ -7,11 +7,11 @@ import {
   getById2,
   search,
   updateSan,
-} from "./sanController";
+} = require ("./sanController");
 
 const express = require("express");
 const router = express.Router();
-export default function sanRoutes(app) {
+module.exports = function sanRoutes(app) {
   router.post("/create", createNew);
   router.get("/get-all", getAll);
   router.put("/block", Block);

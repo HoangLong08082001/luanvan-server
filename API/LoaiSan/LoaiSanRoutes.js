@@ -1,15 +1,15 @@
-import {
+const {
   Block,
   Delete,
   createNew,
   getAll,
   getById,
   updateLoaiSan,
-} from "./LoaiSanController";
+} = require ("./LoaiSanController");
 
 const express = require("express");
 const router = express.Router();
-export default function LoaiSanRoutes(app) {
+module.exports = function LoaiSanRoutes(app) {
   router.get("/get-all", getAll);
   router.post("/create", createNew);
   router.put("/block", Block);

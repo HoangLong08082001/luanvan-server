@@ -1,14 +1,14 @@
-import {
+const {
   BlockDungCuTheThao,
   createNew,
   getById,
   getall,
   updateDungCuTheThao,
-} from "./DungCuTheThaoController";
+} =  require("./DungCuTheThaoController");
 
 const express = require("express");
 const router = express.Router();
-export default function DungCuTheThaoRoutes(app) {
+module.exports= function DungCuTheThaoRoutes(app) {
   router.get("/get", getall);
   router.post("/create", createNew);
   router.put("/block", BlockDungCuTheThao);

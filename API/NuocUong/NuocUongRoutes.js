@@ -1,15 +1,15 @@
-import {
+const {
   BlockNuocUong,
   Delete,
   createNew,
   getById,
   getLoaiNuoc,
   getNuocUong,
-} from "./NuocUongController";
+} = require ("./NuocUongController");
 
 const express = require("express");
 const router = express.Router();
-export default function NuocUongRoutes(app) {
+module.exports =  function NuocUongRoutes(app) {
   router.get("/get-all", getNuocUong);
   router.get("/get-loai-nuoc", getLoaiNuoc);
   router.post("/create", createNew);

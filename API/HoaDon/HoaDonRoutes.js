@@ -9,7 +9,7 @@ const {
 
 const express = require("express");
 const router = express.Router();
-export default function HoaDonRoutes(app) {
+module.exports = function HoaDonRoutes(app) {
   router.post("/create", create);
   router.get("/get-all", getAll);
   router.get("/get-by-id/:id", getById);

@@ -1,4 +1,4 @@
-import {
+const {
   Login,
   createNew,
   getAll,
@@ -6,11 +6,11 @@ import {
   getById,
   renew,
   sendMail,
-} from "./NguoiDungController";
+} = require ("./NguoiDungController");
 
 const express = require("express");
 const router = express.Router();
-export default function NguoiDungRoutes(app) {
+module.exports = function NguoiDungRoutes(app) {
   router.get("/get-all", getAll);
   router.post("/login", Login);
   router.post("/register", createNew);

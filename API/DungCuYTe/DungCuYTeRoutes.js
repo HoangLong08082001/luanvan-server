@@ -1,15 +1,15 @@
-import {
+const {
   BlockDungCuYTe,
   Delete,
   createNew,
   getById,
   getDungCuYTe,
   updateDungCuYTe,
-} from "./DungCuYTeController";
+} = require ("./DungCuYTeController");
 
 const express = require("express");
 const router = express.Router();
-export default function DungCuYTeRoutes(app) {
+module.exports = function DungCuYTeRoutes(app) {
   router.get("/get-all", getDungCuYTe);
   router.post("/create", createNew);
   router.put("/block", BlockDungCuYTe);

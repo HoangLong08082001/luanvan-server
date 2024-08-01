@@ -1,9 +1,9 @@
-import { create, getAll, login, getById, sendMail, reNewPass } from "./AdminController";
+const { create, getAll, login, getById, sendMail, reNewPass } = require ("./AdminController");
 
 const express = require("express");
 const router = express.Router();
 
-export default function AdminRoutes(app) {
+module.exports = function AdminRoutes(app) {
   router.post("/create", create);
   router.post("/login", login);
   router.get("/get", getAll);

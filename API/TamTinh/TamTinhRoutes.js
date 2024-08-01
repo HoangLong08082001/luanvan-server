@@ -1,4 +1,4 @@
-import {
+const {
   addDoAn,
   addDungCuYTe,
   addNuocUong,
@@ -14,11 +14,11 @@ import {
   getTamTinhSan,
   getTamTinhTheThao,
   getTamTinhYTe,
-} from "./TamTinhController";
+} = require ("./TamTinhController");
 
 const express = require("express");
 const router = express.Router();
-export default function TamTinhRoutes(app) {
+module.exports = function TamTinhRoutes(app) {
   router.post("/add-nuoc-uong", addNuocUong);
   router.post("/add-do-an", addDoAn);
   router.post("/add-y-te", addDungCuYTe);

@@ -1,4 +1,4 @@
-import {
+const {
   BlockChiNhanh,
   Delete,
   createChiNhanh,
@@ -7,11 +7,11 @@ import {
   getChiNhanh,
   getQuanPhuong,
   updateChiNhanh,
-} from "./ChiNhanhController";
+} = require ("./ChiNhanhController");
 
 const express = require("express");
 const router = express.Router();
-export default function ChiNhanhRoutes(app) {
+module.exports = function ChiNhanhRoutes(app) {
   router.get("/get-all", getChiNhanh);
   router.post("/create", createChiNhanh);
   router.get("/get-phuong-quan", getQuanPhuong);

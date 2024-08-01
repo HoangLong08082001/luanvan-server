@@ -1,15 +1,15 @@
-import {
+const {
   BlockDoAn,
   Delete,
   createNew,
   getById,
   getDoAn,
   updateDoAn,
-} from "./DoAnController";
+} = require ("./DoAnController");
 
 const express = require("express");
 const router = express.Router();
-export default function DoAnRoutes(app) {
+module.exports = function DoAnRoutes(app) {
   router.get("/get-all", getDoAn);
   router.post("/create", createNew);
   router.put("/block", BlockDoAn);

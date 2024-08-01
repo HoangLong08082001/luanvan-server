@@ -428,7 +428,7 @@ const getByMaHoaDon = async (req, res) => {
                               }
                               if (data4) {
                                 pool.query(
-                                  "SELECT * FROM tam_tinh_san join don_gia on tam_tinh_san.ma_tam_tinh = don_gia.ma_tam_tinh join san on tam_tinh_san.ma_san = san.ma_san join chi_nhanh on san.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen join khung_gio on san.ma_san = khung_gio.ma_san WHERE don_gia.ma_don_gia = ?;",
+                                  "SELECT * FROM tam_tinh_san join don_gia on tam_tinh_san.ma_tam_tinh = don_gia.ma_tam_tinh join san on tam_tinh_san.ma_san = san.ma_san join chi_nhanh on san.ma_chi_nhanh = chi_nhanh.ma_chi_nhanh join quan_huyen on chi_nhanh.ma_quan_huyen = quan_huyen.ma_quan_huyen join khung_gio on tam_tinh_san.ma_khung_gio = khung_gio.ma_khung_gio WHERE don_gia.ma_don_gia = ?;",
                                   [ma_don_gia],
                                   (err, data5) => {
                                     if (err) {

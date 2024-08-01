@@ -156,7 +156,7 @@ const getById2 = (req, res) => {
       if (err) {
         throw err;
       }
-      if (data.length>0) {
+      if (data.length > 0) {
         return res.status(200).json(data);
       }
     }

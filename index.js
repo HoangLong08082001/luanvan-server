@@ -1,18 +1,18 @@
-const AdminRoutes = require ("./API/Admin/AdminRoutes");
-const ChiNhanhRoutes = require ("./API/ChiNhanh/ChiNhanhRoutes");
-const DoAnRoutes = require ("./API/DoAn/DoAnRoutes");
-const DungCuTheThaoRoutes = require ("./API/DungCuTheThao/DungCuTheThaoRoutes");
-const DungCuYTeRoutes = require ("./API/DungCuYTe/DungCuYTeRoutes");
-const NuocUongRoutes = require ("./API/NuocUong/NuocUongRoutes");
-const sanRoutes = require ("./API/San/sanRoutes");
-const NguoiDungRoutes = require ("./API/NguoiDung/NguoiDungRoutes");
+const AdminRoutes = require("./API/Admin/AdminRoutes");
+const ChiNhanhRoutes = require("./API/ChiNhanh/ChiNhanhRoutes");
+const DoAnRoutes = require("./API/DoAn/DoAnRoutes");
+const DungCuTheThaoRoutes = require("./API/DungCuTheThao/DungCuTheThaoRoutes");
+const DungCuYTeRoutes = require("./API/DungCuYTe/DungCuYTeRoutes");
+const NuocUongRoutes = require("./API/NuocUong/NuocUongRoutes");
+const sanRoutes = require("./API/San/sanRoutes");
+const NguoiDungRoutes = require("./API/NguoiDung/NguoiDungRoutes");
 
-const TamTinhRoutes = require ("./API/TamTinh/TamTinhRoutes");
-const PaymentRoutes = require ("./API/Payment/PaymentRoutes");
-const LoaiSanRoutes = require ("./API/LoaiSan/LoaiSanRoutes");
-const KhungGioRoutes = require ("./API/KhungGio/KhungGioRoutes");
-const HoaDonRoutes = require ("./API/HoaDon/HoaDonRoutes");
-const DashboardRoutes = require ("./API/Dashboard/DashboardRoutes");
+const TamTinhRoutes = require("./API/TamTinh/TamTinhRoutes");
+const PaymentRoutes = require("./API/Payment/PaymentRoutes");
+const LoaiSanRoutes = require("./API/LoaiSan/LoaiSanRoutes");
+const KhungGioRoutes = require("./API/KhungGio/KhungGioRoutes");
+const HoaDonRoutes = require("./API/HoaDon/HoaDonRoutes");
+const DashboardRoutes = require("./API/Dashboard/DashboardRoutes");
 const express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
@@ -54,7 +54,7 @@ LoaiSanRoutes(app);
 KhungGioRoutes(app);
 HoaDonRoutes(app);
 DashboardRoutes(app);
-server.listen(port, (err) => {
+app.listen(port, (err) => {
   if (err) {
     throw err;
   } else {

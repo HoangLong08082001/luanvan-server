@@ -54,7 +54,7 @@ LoaiSanRoutes(app);
 KhungGioRoutes(app);
 HoaDonRoutes(app);
 DashboardRoutes(app);
-app.listen(port, (err) => {
+app.listen(4000, (err) => {
   if (err) {
     throw err;
   } else {

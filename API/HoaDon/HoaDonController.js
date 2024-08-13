@@ -134,7 +134,7 @@ const create = (req, res) => {
                                                                     to: `${email}`, // Địa chỉ email của người nhận
                                                                     subject:
                                                                       "HOÁ ĐƠN THANH TOÁN", // Tiêu đề email
-                                                                    text: `Hoá đơn thanh toán: http://localhost:3000/admin-chi-tiet-hoa-don/${data.insertId}`, // Nội dung email
+                                                                    text: `Hoá đơn thanh toán: https://luanvan-client.vercel.app/admin-chi-tiet-hoa-don/${data.insertId}`, // Nội dung email
                                                                   };
                                                                 transport.sendMail(
                                                                   mailOptions,
